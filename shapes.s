@@ -28,4 +28,14 @@ rectangle_draw_col:
 
 	ret
 
+draw_arena:
+    movz x1, 0
+	movz x2, 380
+	movz x3, SCREEN_WIDTH
+	movz x4, 100
+    movz x10, 0x44, lsl 16
+    movz x10, 0x0F2, lsl 00
+    
+	bl rectangle
+
 .endif
