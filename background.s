@@ -34,26 +34,6 @@ cambio_color:
 	
 ///////////////////////////////////////////////////////////////
 	
-	bl color_suelo
-
-	mov x2, SCREEN_HEIGH         // Y Size (el eje y)
-loop2:
-	mov x1, SCREEN_WIDTH         // X Size (el eje de las x)
-loop3:
-	bl color_suelo
-	stur x10,[x0]  	
-	add x0,x0,4       
-	sub x1,x1,1    
-	cbnz x1,loop2  	
-	sub x2,x2,1    	
-	cmp x2,x19  	
-	b.eq endloop
-	cbnz x2,loop3 	
 endloop:
-
-color_suelo:
-	movz x10, 0xE2, lsl 16 //(color de el que partimos)
-    movk x10, 0xD849, lsl 00
-	ret //vuelve a donde lo llamaste
 
 .endif
