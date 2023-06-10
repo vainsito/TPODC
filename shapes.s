@@ -29,13 +29,67 @@ rectangle_draw_col:
 	ret
 
 draw_arena:
-    movz x1, 0
+	movz x1, 0
 	movz x2, 380
 	movz x3, SCREEN_WIDTH
 	movz x4, 100
-    movz x10, 0x44, lsl 16
-    movz x10, 0x0F2, lsl 00
-    
+	movz x10, 0xF0, lsl 16
+	movk x10, 0xE68C, lsl 00 
+
 	bl rectangle
+    
+/*
+  Funcion circle: Dibuja un circulo de radio R en posicion (x,y).
+  Registros predefinidos: x1:Y, x2:X, x3:R
+  Registros seteados: 
+*/
+
+circle:
+		
+	//Top left coords
+	sub x4, x1, x3 	//i = y-R
+	sub x5, x2, x3 	//j	= x-R
+
+	//Bottom right coords
+	add x11, x1, x3 	//x11 = y+R
+	add x12, x2, x3 	//x12 = x+R	
+
+circle_next_row:		//x0 = x20 +  4*[X + (Y*640)]
+	sub x5, x2, x3
+	mov x6, SCREEN_WIDTH
+	mul x6, x6, x4
+	add x6, x6, x5
+	lsl x6, x6, #2
+	add x0, x20, x6
+
+
+circle_draw_row:		//IF (i-y)^2 + (j-x)^2 <= R^2	 THEN	draw_pixel(j,i)
+	sub x7, x4, x1		//x7 = i - y
+	mul x7, x7, x7		//x7 = (i-y)^2
+	sub x13, x5, x2 	//x13 = j - x
+	mul x13, x13, x13	//x13 = (j-x)^2
+	add x7, x7, x13		//x7 = (i-y)^2 + (j-x)^2 
+	mul x9, x3, x3		//x9 = R^2
+	
+	cmp x5, x12
+	b.gt cir_continue_next_row
+
+	cmp x7, x9
+	b.gt cir_next_pixel
+	
+	stur w10, [x0]		//Draw actual pixel
+	
+	b cir_next_pixel
+
+cir_continue_next_row:
+	add x4, x4, #1
+	cmp x4, x11
+	b.le circle_next_row
+	ret
+
+cir_next_pixel:
+	add x5, x5, #1		//x5 = j + 1		
+	add x0, x0, #4		//fb next pixel
+	b circle_draw_row
 
 .endif
