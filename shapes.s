@@ -91,5 +91,66 @@ cir_next_pixel:
 	add x5, x5, #1		//x5 = j + 1		
 	add x0, x0, #4		//fb next pixel
 	b circle_draw_row
+/*
+
+  Funcion triangle: Dibuja un triangulo de ancho y alto asignado en las posiciones (x,y).
+  Registros predefinidos: x1: X, x2: Y, x3: Width, x4: Height, x10: Color
+  Registros seteados: x5:Pixel, x6.
+
+ */
+
+triangulo:
+	sub sp, sp, 24
+	stur lr, [sp]	
+	stur x3, [sp, 8]
+	stur x4, [sp, 16]
+	
+	mov x9, x3
+	mov x1, x3
+	mov x2, x4
+	
+t_loopy:
+	mov x3, x9
+t_loopx:
+	bl setpixel
+	stur w11, [x7]
+	add x3, x3, 1
+	cmp x3, x1
+	b.le t_loopx
+	sub x9, x9, 1
+	add x1, x1, 1
+	add x4, x4, 1
+	sub x5, x5, 1
+	cbnz x5, t_loopy
+
+	ldur lr, [sp]
+	ldur x3, [sp, 8]
+	ldur x4, [sp, 16]
+	add sp, sp, 24
+	br lr
+	ret
+
+setpixel:
+    sub sp, sp, 48
+    stur x6, [sp, 40]
+    stur x9, [sp, 32]
+    stur lr, [sp, 24] 
+	stur x4, [sp, 8]
+	stur x3, [sp, 0]    
+	
+	mov x9, 640
+	mul x6, x4, x9
+	add x7, x6, x3
+	mov x9, 4 
+	mul x7, x7, x9              
+	add x7, x7, x20
+    
+    ldur x6, [sp, 40]
+    ldur x9, [sp, 32]
+    ldur lr, [sp, 24]
+	ldur x4, [sp, 8]
+	ldur x3, [sp, 0]
+	add sp, sp, 48   
+	br lr
 
 .endif

@@ -38,28 +38,127 @@ endloop:
 
 	movz x1, 0              	// Coordenada X
 	movz x2, 380				// Coordenada Y
-	movz x3, SCREEN_WIDTH		// Width 
-	movz x4, 100				// Heigh 
+	movz x3, SCREEN_WIDTH		// Width //Ancho
+	movz x4, 100				// Heigh //Alto 
 	movz x10, 0xF0, lsl 16		// Color
 	movk x10, 0xE68C, lsl 00 	// Color 
 	bl rectangle
-// ------------------------------ Cuadrado --------------------------------------- //
+// ------------------------------ Rectangulo BOB --------------------------------------- //
 
-	movz x1, 150
-	movz x2, 200
-	movz x3, 120
-	movz x4, 100
-	movz x10, 0xF0, lsl 16
-	movk x10, 0xE68C, lsl 00 
+	movz x1, 240 // Coordenada X
+	movz x2, 100 // Coordenada Y
+	movz x3, 170 // Ancho
+	movz x4, 250 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFF00, lsl 00 
 	bl rectangle
-// ----------------------------- Burbujas -----------------------------------------// 
-	mov x1, 230		
-	mov x2, 100
-	mov x3, 50
-	movz x10, 0x18, lsl 16
-	movk x10, 0x2E3D, lsl 00	
 
+	// Pantalon bob
+
+	movz x1, 240 // Coordenada X
+	movz x2, 270 // Coordenada Y
+	movz x3, 170 // Ancho
+	movz x4, 87 // Alto
+	movz x10, 0xCD, lsl 16
+	movk x10, 0x853F, lsl 00 
+	bl rectangle
+
+	// Cinto de bob
+	movz x1, 250 // Coordenada X
+	movz x2, 300 // Coordenada Y
+	movz x3, 30 // Ancho
+	movz x4, 10 // Alto
+	movz x10, 0x8B, lsl 16
+	movk x10, 0x4513, lsl 00 
+	bl rectangle
+
+	movz x1, 290 // Coordenada X
+	movz x2, 300 // Coordenada Y
+	movz x3, 30 // Ancho
+	movz x4, 10 // Alto
+	movz x10, 0x8B, lsl 16
+	movk x10, 0x4513, lsl 00 
+	bl rectangle
+
+	movz x1, 330 // Coordenada X
+	movz x2, 300 // Coordenada Y
+	movz x3, 30 // Ancho
+	movz x4, 10 // Alto
+	movz x10, 0x8B, lsl 16
+	movk x10, 0x4513, lsl 00 
+	bl rectangle
+
+	movz x1, 370 // Coordenada X
+	movz x2, 300 // Coordenada Y
+	movz x3, 30 // Ancho
+	movz x4, 10 // Alto
+	movz x10, 0x8B, lsl 16
+	movk x10, 0x4513, lsl 00 
+	bl rectangle
+
+	// Camisa bob
+	movz x1, 240 // Coordenada X
+	movz x2, 260 // Coordenada Y
+	movz x3, 170 // Ancho
+	movz x4, 30 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00 
+	bl rectangle
+
+	// Corbata bob 
+
+	movz x1, 320 // Coordenada X
+	movz x2, 260 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 50 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0x6666, lsl 00 
+	bl rectangle
+	// Triangulo corbata
+
+	mov x5, 15 // altura del triangulo
+	mov x3, 325 // posicion esquina X  DERECHA O IZQUIERDA
+	mov x4, 300 // posicion esquina Y ABAJO O ARRIBA
+	movz x11, 0xFF, lsl 16
+	movz x11, 0x6666, lsl 00
+	bl triangulo
+
+	// Ojos bob
+	movz x10, 0xF5, lsl 16
+    movk x10, 0xFFFA, lsl 00
+	
+	mov x3, #25                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+    bl circle
+	add x2, x2, 70
 	bl circle 
+
+	// Pupilas 
+
+	mov x3, #10                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+	movz x10, 0x40, lsl 16
+    movk x10, 0xE0D0, lsl 00
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+	mov x3, #5                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+	movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+// ----------------------------- Burbujas -----------------------------------------// 
+
 // ------------------------------  -----------------------------------------------//
 
     // Infinite Loop
