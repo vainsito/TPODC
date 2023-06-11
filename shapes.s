@@ -1,156 +1,738 @@
-.ifndef shapes_s
-.equ shapes_s, 0
-
 .include "data.s"
+.include "shape.s"
+.globl main
 
-/*
-  Funcion Rectangle: Dibuja un cudrado de ancho y alto asignado en las posiciones (x,y).
-  Registros predefinidos: x1: X, x2: Y, x3: Width, x4: Height, x10: Color
-  Registros seteados: x5:Pixel, x6.
+main:
+	mov x25,SCREEN_WIDTH
+    // x0 contiene la direccion base del framebuffer
+    mov x20, x0 // Guarda la dirección base del framebuffer en x20
 
-*/
-rectangle: 
-rectangle_draw_row: //x5 = x20 +  4*[X + (Y*640)]
-	mov x5, SCREEN_WIDTH
-	mul x5, x2, x5
-	add x5, x5, x1
-	lsl x5, x5, #2
-	add x5, x5, x20
-	mov x6, x3
-rectangle_draw_col:
-		stur w10, [x5]
-		add x5, x5, #4
-		sub x6, x6, #1
-		cbnz x6, rectangle_draw_col
-	add x2, x2, #1
-	sub x4, x4, #1
-	cbnz x4, rectangle_draw_row
+// ------------------------------ Dibujar el fondo --------------------------------------- //
 
-	ret
+	mov x20, x0
+	movz x10, 0x00, lsl 16
+	movk x10, 0x00FF, lsl 00 // Color de fondo
 
-draw_arena:
-	movz x1, 0
-	movz x2, 380
-	movz x3, SCREEN_WIDTH
-	movz x4, 100
-	movz x10, 0xF0, lsl 16
-	movk x10, 0xE68C, lsl 00 
+	mov x2, SCREEN_HEIGH         // Y Size 
+loop1:
+	mov x1, SCREEN_WIDTH         // X Size
+loop0:
+	stur x10,[x0]  // Colorear el pixel N 
+	add x0,x0,4    // Siguiente pixel    
+	sub x1,x1,1    // Decrementar contador X 
+	cbnz x1,loop0  // Si no terminó la fila, salto (hago lo mismo hasta que se termine la fila)
+	sub x2,x2,1    // Decrementar contador Y (si se termina la fila paso a la siguiente columna) 
+	cmp x2, #100 
+	b.le endloop
+	cmp x2,#250   //A partir de esa altura fijamos un color 
+	b.lt loop1 	
+	bl cambio_color
+	cbnz x2,loop1 	// Si no es la última fila, salto 
 
+cambio_color:
+	sub x10,x10, 1 //Vamos cambiando progresivamente el color  
+    ret 
+
+endloop:  
+
+// ------------------------------ Casa de Patricio --------------------------------------- //
+
+	movz x10, 0x66, lsl 16
+	movk x10, 0x3300, lsl 00
+
+	mov x3, #75                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #90			      // Coordenada X (centro del circulo)
+	mov x1, #390			     // Coordenada Y
+	bl circle 
+
+
+// ------------------------------ -------- Arena ---------------------------------------- //
+
+	movz x1, 0              	// Coordenada X
+	movz x2, 380				// Coordenada Y
+	movz x3, SCREEN_WIDTH		// Width 
+	movz x4, 100				// Heigh 
+	movz x10, 0xFF, lsl 16		// Color
+	movk x10, 0xB266, lsl 00 	// Color 
 	bl rectangle
-    
-/*
-  Funcion circle: Dibuja un circulo de radio R en posicion (x,y).
-  Registros predefinidos: x1:Y, x2:X, x3:R
-  Registros seteados: 
-*/
-
-circle:
-		
-	//Top left coords
-	sub x4, x1, x3 	//i = y-R
-	sub x5, x2, x3 	//j	= x-R
-
-	//Bottom right coords
-	add x11, x1, x3 	//x11 = y+R
-	add x12, x2, x3 	//x12 = x+R	
-
-circle_next_row:		//x0 = x20 +  4*[X + (Y*640)]
-	sub x5, x2, x3
-	mov x6, SCREEN_WIDTH
-	mul x6, x6, x4
-	add x6, x6, x5
-	lsl x6, x6, #2
-	add x0, x20, x6
-
-
-circle_draw_row:		//IF (i-y)^2 + (j-x)^2 <= R^2	 THEN	draw_pixel(j,i)
-	sub x7, x4, x1		//x7 = i - y
-	mul x7, x7, x7		//x7 = (i-y)^2
-	sub x13, x5, x2 	//x13 = j - x
-	mul x13, x13, x13	//x13 = (j-x)^2
-	add x7, x7, x13		//x7 = (i-y)^2 + (j-x)^2 
-	mul x9, x3, x3		//x9 = R^2
 	
-	cmp x5, x12
-	b.gt cir_continue_next_row
+// ----------------------------------- Casa de calamardo  ----------------------------------------//
 
-	cmp x7, x9
-	b.gt cir_next_pixel
+	movz x10, 0x00, lsl 16
+	movk x10, 0x3366, lsl 00
+
+	movz x1, 560 // Coordenada X
+	movz x2, 300 // Coordenada Y
+	movz x3, 50 // Ancho
+	movz x4, 100 // Alto
+	bl rectangle  
+
+	mov x3, #5                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #573			      // Coordenada X (centro del circulo)
+	mov x1, #343			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #5                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #593			      // Coordenada X (centro del circulo)
+	mov x1, #343			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	movz x10, 0x99, lsl 16
+	movk x10, 0x4C00, lsl 00
+
+	movz x1, 580 // Coordenada X
+	movz x2, 380 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 20 // Alto
+	bl rectangle  
+
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0066, lsl 00
+
+	movz x1, 610 // Coordenada X
+	movz x2, 330 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 40 // Alto
+	bl rectangle 
+
+	movz x1, 550 // Coordenada X
+	movz x2, 330 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 40 // Alto
+	bl rectangle 
 	
-	stur w10, [x0]		//Draw actual pixel
+	movz x1, 570 // Coordenada X
+	movz x2, 330 // Coordenada Y
+	movz x3, 30 // Ancho
+	movz x4, 10 // Alto
+	bl rectangle 
 	
-	b cir_next_pixel
-
-cir_continue_next_row:
-	add x4, x4, #1
-	cmp x4, x11
-	b.le circle_next_row
-	ret
-
-cir_next_pixel:
-	add x5, x5, #1		//x5 = j + 1		
-	add x0, x0, #4		//fb next pixel
-	b circle_draw_row
-/*
-
-  Funcion triangle: Dibuja un triangulo de ancho y alto asignado en las posiciones (x,y).
-  Registros predefinidos: x1: X, x2: Y, x3: Width, x4: Height, x10: Color
-  Registros seteados: x5:Pixel, x6.
-
- */
-
-triangulo:
-	sub sp, sp, 24
-	stur lr, [sp]	
-	stur x3, [sp, 8]
-	stur x4, [sp, 16]
+	movz x1, 580 // Coordenada X
+	movz x2, 340 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 20 // Alto
+	bl rectangle 
 	
-	mov x9, x3
-	mov x1, x3
-	mov x2, x4
+// ----------------------------------- Burbujas  ----------------------------------------------//
+
 	
-t_loopy:
-	mov x3, x9
-t_loopx:
-	bl setpixel
-	stur w11, [x7]
-	add x3, x3, 1
-	cmp x3, x1
-	b.le t_loopx
-	sub x9, x9, 1
-	add x1, x1, 1
-	add x4, x4, 1
-	sub x5, x5, 1
-	cbnz x5, t_loopy
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #50			      // Coordenada X (centro del circulo)
+	mov x1, #150			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
 
-	ldur lr, [sp]
-	ldur x3, [sp, 8]
-	ldur x4, [sp, 16]
-	add sp, sp, 24
-	br lr
-	ret
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #120			      // Coordenada X (centro del circulo)
+	mov x1, #50			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle 
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
 
-setpixel:
-    sub sp, sp, 48
-    stur x6, [sp, 40]
-    stur x9, [sp, 32]
-    stur lr, [sp, 24] 
-	stur x4, [sp, 8]
-	stur x3, [sp, 0]    
+	mov x3, #6              // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #160		      // Coordenada X (centro del circulo)
+	mov x1, #180			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle 
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6               // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #170		      // Coordenada X (centro del circulo)
+	mov x1, #350			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle 
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #500			      // Coordenada X (centro del circulo)
+	mov x1, #70			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle 
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #600			      // Coordenada X (centro del circulo)
+	mov x1, #200			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle 
+
+	mov x3, #6               // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #450			      // Coordenada X (centro del circulo)
+	mov x1, #140			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle 
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #520			      // Coordenada X (centro del circulo)
+	mov x1, #300			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #100			      // Coordenada X (centro del circulo)
+	mov x1, #270			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #500			      // Coordenada X (centro del circulo)
+	mov x1, #350		     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #580			      // Coordenada X (centro del circulo)
+	mov x1, #20			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #6                // Radio del circulo
+	mul x4, x3, x3	 
+	mov x2, #200			      // Coordenada X (centro del circulo)
+	mov x1, #90			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle 
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
 	
-	mov x9, 640
-	mul x6, x4, x9
-	add x7, x6, x3
-	mov x9, 4 
-	mul x7, x7, x9              
-	add x7, x7, x20
-    
-    ldur x6, [sp, 40]
-    ldur x9, [sp, 32]
-    ldur lr, [sp, 24]
-	ldur x4, [sp, 8]
-	ldur x3, [sp, 0]
-	add sp, sp, 48   
-	br lr
+//--------------------------------------------BOB ESPONJA------------------------------------------------//
 
-.endif
+	//CUERPO//
+
+	movz x1, 240 // Coordenada X
+	movz x2, 100 // Coordenada Y
+	movz x3, 170 // Ancho
+	movz x4, 250 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFF33, lsl 00 
+	bl rectangle
+
+	//CACHETES BOB//
+	
+	mov x3, #5                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 280                  // Coordenada X (centro del circulo)
+    mov x1, 190                // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0x678B, lsl 00
+    bl circle
+
+	//DIENTES BOB//
+
+	movz x1, 328 // Coordenada X
+	movz x2, 212 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 15 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00 
+	bl rectangle
+
+	movz x1, 314 // Coordenada X
+	movz x2, 212 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 15 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00 
+	bl rectangle
+	
+	//SONRISA//
+	
+	mov x3, #52              // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 325                  // Coordenada X (centro del circulo)
+    mov x1, 163                // Coordenada Y
+	movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00
+    bl circle
+
+	mov x3, #55                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 325                  // Coordenada X (centro del circulo)
+    mov x1, 157                 // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0xFF33, lsl 00
+    bl circle
+
+	//CACHETE IZQUIERDO//
+
+	mov x3, #8                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 283                  // Coordenada X (centro del circulo)
+    mov x1, 195                // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0xA07A, lsl 00
+    bl circle
+
+	mov x3, #7                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 285                  // Coordenada X (centro del circulo)
+    mov x1, 196                // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0xFF33, lsl 00
+    bl circle
+
+	//PECAS IZQUIERDA//
+
+	mov x3, #1                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 283                  // Coordenada X (centro del circulo)
+    mov x1, 193                // Coordenada Y
+	movz x10, 0x8B, lsl 16
+    movk x10, 0x4513, lsl 00
+    bl circle
+
+	mov x3, #1                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 283                  // Coordenada X (centro del circulo)
+    mov x1, 197                // Coordenada Y
+	movz x10, 0x8B, lsl 16
+    movk x10, 0x4513, lsl 00
+    bl circle
+
+	mov x3, #1                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 196                // Coordenada Y
+	movz x10, 0x8B, lsl 16
+    movk x10, 0x4513, lsl 00
+    bl circle
+
+	//CACHETE DERECHO//
+	mov x3, #8                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 364                  // Coordenada X (centro del circulo)
+    mov x1, 195                // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0xA07A, lsl 00
+    bl circle
+
+	mov x3, #7                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 362                  // Coordenada X (centro del circulo)
+    mov x1, 196                // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0xFF33, lsl 00
+    bl circle
+
+	//PECAS DERECHAS//
+	
+	mov x3, #1                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 363                  // Coordenada X (centro del circulo)
+    mov x1, 193                // Coordenada Y
+	movz x10, 0x8B, lsl 16
+    movk x10, 0x4513, lsl 00
+    bl circle
+
+	mov x3, #1                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 360                  // Coordenada X (centro del circulo)
+    mov x1, 197               // Coordenada Y
+	movz x10, 0x8B, lsl 16
+    movk x10, 0x4513, lsl 00
+    bl circle
+
+	mov x3, #1                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 366                  // Coordenada X (centro del circulo)
+    mov x1, 196                // Coordenada Y
+	movz x10, 0x8B, lsl 16
+    movk x10, 0x4513, lsl 00
+    bl circle
+
+	//PANTALON BOB//
+
+	movz x1, 240 // Coordenada X
+	movz x2, 270 // Coordenada Y
+	movz x3, 170 // Ancho
+	movz x4, 87 // Alto
+	movz x10, 0xCD, lsl 16
+	movk x10, 0x853F, lsl 00 
+	bl rectangle
+
+	//CINTURON//
+
+	movz x1, 250 // Coordenada X
+	movz x2, 300 // Coordenada Y
+	movz x3, 30 // Ancho
+	movz x4, 10 // Alto
+	movz x10, 0x8B, lsl 16
+	movk x10, 0x4513, lsl 00 
+	bl rectangle
+	movz x2, 300 // Coordenada Y
+	add x1,x1,40
+	movz x4, 10 // Alto
+	bl rectangle
+	movz x2, 300 // Coordenada Y
+	add x1,x1,40
+	movz x4, 10 // Alto
+	bl rectangle
+	movz x2, 300 // Coordenada Y
+	add x1,x1,40
+	movz x4, 10 // Alto
+	bl rectangle 
+
+	//CAMISA BOB//
+
+	movz x1, 240 // Coordenada X
+	movz x2, 260 // Coordenada Y
+	movz x3, 170 // Ancho
+	movz x4, 30 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00 
+	bl rectangle
+
+	//CORBATA BOB//
+
+	movz x1, 320 // Coordenada X
+	movz x2, 260 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 50 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0x6666, lsl 00 
+	bl rectangle
+
+	//PESTAÑAS IZQUIERDAS//
+
+	movz x1, 279 // Coordenada X
+	movz x2, 129 // Coordenada Y
+	movz x3, 3 // Ancho
+	movz x4, 11 // Alto
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0000, lsl 00 
+	bl rectangle
+	
+	movz x1, 287 // Coordenada X
+	movz x2, 125 // Coordenada Y
+	movz x3, 3 // Ancho
+	movz x4, 20 // Alto
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0000, lsl 00 
+	bl rectangle
+
+	movz x1, 297 // Coordenada X
+	movz x2, 129 // Coordenada Y
+	movz x3, 3 // Ancho
+	movz x4, 11 // Alto
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0000, lsl 00 
+	bl rectangle
+  
+ 	//PESTAÑAS DERECHAS//
+
+  	movz x1, 349 // Coordenada X
+	movz x2, 129 // Coordenada Y
+	movz x3, 3 // Ancho
+	movz x4, 11 // Alto
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0000, lsl 00 
+	bl rectangle
+	
+	movz x1, 357 // Coordenada X
+	movz x2, 125 // Coordenada Y
+	movz x3, 3 // Ancho
+	movz x4, 20 // Alto
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0000, lsl 00 
+	bl rectangle
+
+	movz x1, 367 // Coordenada X
+	movz x2, 129 // Coordenada Y
+	movz x3, 3 // Ancho
+	movz x4, 11 // Alto
+	movz x10, 0x00, lsl 16
+	movk x10, 0x0000, lsl 00 
+	bl rectangle
+	
+	// Ojos bob
+	movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00
+	
+	mov x3, #26                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+	movz x10, 0xF5, lsl 16
+    movk x10, 0xFFFA, lsl 00
+	
+	mov x3, #25                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+	//PUPILAS//
+
+	mov x3, #10                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+	movz x10, 0x40, lsl 16
+    movk x10, 0xE0D0, lsl 00
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+	mov x3, #5                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 290                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+	movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+	//MANCHAS BOB//
+
+	mov x3, #3                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 250                  // Coordenada X (centro del circulo)
+    mov x1, 160                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle
+
+	mov x3, #10                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 253                  // Coordenada X (centro del circulo)
+    mov x1, 140                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle
+
+	mov x3, #7               // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 390                  // Coordenada X (centro del circulo)
+    mov x1, 120                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle
+
+	mov x3, #12                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 370                  // Coordenada X (centro del circulo)
+    mov x1, 230                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle
+
+	mov x3, #4                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 350                  // Coordenada X (centro del circulo)
+    mov x1, 250                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle
+
+	mov x3, #11                // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 280                  // Coordenada X (centro del circulo)
+    mov x1, 240                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle
+
+	mov x3, #6               // Radio del circulo
+    mul x4, x3, x3
+    mov x2, 267                  // Coordenada X (centro del circulo)
+    mov x1, 220                 // Coordenada Y
+	movz x10, 0xB8, lsl 16
+    movk x10, 0x860B, lsl 00
+    bl circle 
+
+	//MEDIAS//
+
+    movz x1, 285 // Coordenada X
+    movz x2, 360 // Coordenada Y
+    movz x3, 10 // Ancho
+    movz x4, 80 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFFFF, lsl 00 
+    bl rectangle 
+	
+	movz x1, 355 // Coordenada X
+    movz x2, 360 // Coordenada Y
+    movz x3, 10 // Ancho
+    movz x4, 80 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFFFF, lsl 00 
+    bl rectangle 
+
+    //PIERNAS//
+
+    movz x1, 285 // Coordenada X
+    movz x2, 357 // Coordenada Y
+    movz x3, 10 // Ancho
+    movz x4, 40 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFF00, lsl 00 
+    bl rectangle 
+	
+	movz x1, 355 // Coordenada X
+    movz x2, 357 // Coordenada Y
+    movz x3, 10 // Ancho
+    movz x4, 40 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFF00, lsl 00 
+    bl rectangle 
+
+
+	//ZAPATOS//
+
+    movz x1, 266 // Coordenada X
+    movz x2, 437 // Coordenada Y
+    movz x3, 30 // Ancho
+    movz x4, 10 // Alto
+    movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00 
+    bl rectangle 
+
+	movz x1, 355 // Coordenada X
+    movz x2, 437 // Coordenada Y
+    movz x3, 30 // Ancho
+    movz x4, 10 // Alto
+    movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00 
+    bl rectangle 
+
+    //BRAZOS//
+	
+    movz x1, 210 // Coordenada X
+    movz x2, 260 // Coordenada Y
+    movz x3, 30 // Ancho
+    movz x4, 10 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+    bl rectangle
+	
+    movz x1, 160 // Coordenada X
+    movz x2, 260 // Coordenada Y
+    movz x3, 50 // Ancho
+    movz x4, 10 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFF00, lsl 00 
+    bl rectangle
+
+    movz x1, 160 // Coordenada X
+    movz x2, 180 // Coordenada Y
+    movz x3, 10 // Ancho
+    movz x4, 80 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFF00, lsl 00 
+    bl rectangle
+
+	movz x1, 450 // Coordenada X
+    movz x2, 260 // Coordenada Y
+    movz x3, 10 // Ancho
+    movz x4, 80 // Alto
+    movz x10, 0xFF, lsl 16
+    movk x10, 0xFF00, lsl 00 
+    bl rectangle
+	
+	movz x1, 400 // Coordenada X
+    movz x2, 260 // Coordenada Y
+    movz x3, 30 // Ancho
+    movz x4, 10 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+    bl rectangle
+
+	movz x1, 430 // Coordenada X
+    movz x2, 260 // Coordenada Y
+    movz x3, 20 // Ancho
+    movz x4, 10 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFF00, lsl 00
+    bl rectangle
+
+
+    // Infinite Loop
+InfLoop:
+    b InfLoop
