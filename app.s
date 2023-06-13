@@ -8,8 +8,13 @@ main:
     mov x20, x0 // Guarda la dirección base del framebuffer en x20
 
 // ------------------------------ Dibujar el fondo --------------------------------------- //
-
 	mov x20, x0
+	mov x19, 240 	//COORDENADA X DE BOB
+	mov x18, 100 	//COORDENADA Y DE BOB
+	
+	mov x21, #50 	//Coordenada x de burbujas 
+	mov x22, #150	//Coordenada y de burbujas 
+
 	movz x10, 0x00, lsl 16
 	movk x10, 0x00FF, lsl 00 // Color de fondo
 
@@ -130,11 +135,10 @@ endloop:
 	
 // ----------------------------------- Burbujas  ----------------------------------------------//
 
-	
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #50			      // Coordenada X (centro del circulo)
-	mov x1, #150			     // Coordenada Y
+	mov x2, x21			      // Coordenada X (centro del circulo)
+	mov x1, x22			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle
@@ -143,22 +147,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #120			      // Coordenada X (centro del circulo)
-	mov x1, #50			     // Coordenada Y
-	movz x10, 0xFF, lsl 16
-	movk x10, 0xFFFF, lsl 00
-	bl circle 
-	sub x3,x3,1
-	movz x10, 0x66, lsl 16
-	movk x10, 0xB2FF, lsl 00
-	bl circle
-
-	mov x3, #6              // Radio del circulo
-	mul x4, x3, x3	 
-	mov x2, #160		      // Coordenada X (centro del circulo)
-	mov x1, #180			     // Coordenada Y
+	add x2, x21, 80			      // Coordenada X (centro del circulo)
+	add x1, x22, 100			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle 
@@ -167,22 +159,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6               // Radio del circulo
+	mov x3, #8              // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #170		      // Coordenada X (centro del circulo)
-	mov x1, #350			     // Coordenada Y
-	movz x10, 0xFF, lsl 16
-	movk x10, 0xFFFF, lsl 00
-	bl circle
-	sub x3,x3,1
-	movz x10, 0x66, lsl 16
-	movk x10, 0xB2FF, lsl 00
-	bl circle 
-
-	mov x3, #6                // Radio del circulo
-	mul x4, x3, x3	 
-	mov x2, #500			      // Coordenada X (centro del circulo)
-	mov x1, #70			     // Coordenada Y
+	add x2, x21,110		      // Coordenada X (centro del circulo)
+	add x1, x22, 30			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle 
@@ -191,10 +171,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8              // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #600			      // Coordenada X (centro del circulo)
-	mov x1, #200			     // Coordenada Y
+	add x2, x21, 120		      // Coordenada X (centro del circulo)
+	add x1, x22, 200			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle
@@ -203,10 +183,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle 
 
-	mov x3, #6               // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #450			      // Coordenada X (centro del circulo)
-	mov x1, #140			     // Coordenada Y
+	add x2, x21, 450			      // Coordenada X (centro del circulo)
+	add x1, x22, 80			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle 
@@ -215,7 +195,31 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
+	mul x4, x3, x3	 
+	add x2, x21, 550			      // Coordenada X (centro del circulo)
+	add x1, x22, 50		     	// Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle 
+
+	mov x3, #8              // Radio del circulo
+	mul x4, x3, x3	 
+	add x2, x21, 400			      // Coordenada X (centro del circulo)
+	sub x1, x22, 10			     // Coordenada Y
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00
+	bl circle 
+	sub x3,x3,1
+	movz x10, 0x66, lsl 16
+	movk x10, 0xB2FF, lsl 00
+	bl circle
+
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
 	mov x2, #520			      // Coordenada X (centro del circulo)
 	mov x1, #300			     // Coordenada Y
@@ -227,10 +231,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #100			      // Coordenada X (centro del circulo)
-	mov x1, #270			     // Coordenada Y
+	add x2, x21, 50		      // Coordenada X (centro del circulo)
+	add x1, x22, 120			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle
@@ -239,10 +243,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #500			      // Coordenada X (centro del circulo)
-	mov x1, #350		     // Coordenada Y
+	add x2, x21, 450			      // Coordenada X (centro del circulo)
+	add x1, x22, 250		     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle
@@ -251,10 +255,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #580			      // Coordenada X (centro del circulo)
-	mov x1, #20			     // Coordenada Y
+	add x2, x21, 530			      // Coordenada X (centro del circulo)
+	sub x1, x22, 130			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle
@@ -263,10 +267,10 @@ endloop:
 	movk x10, 0xB2FF, lsl 00
 	bl circle
 
-	mov x3, #6                // Radio del circulo
+	mov x3, #8                // Radio del circulo
 	mul x4, x3, x3	 
-	mov x2, #200			      // Coordenada X (centro del circulo)
-	mov x1, #90			     // Coordenada Y
+	add x2, x21, 50			      // Coordenada X (centro del circulo)
+	sub x1, x22, 60			     // Coordenada Y
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
 	bl circle 
@@ -279,56 +283,54 @@ endloop:
 
 	//CUERPO//
 
-	movz x1, 240 // Coordenada X
-	movz x2, 100 // Coordenada Y
+	add x1, x19, xzr // Coordenada X
+	add x2, x18, xzr // Coordenada Y
 	movz x3, 170 // Ancho
 	movz x4, 250 // Alto
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFF33, lsl 00 
 	bl rectangle
-
+	
 	//CACHETES BOB//
 	
 	mov x3, #5                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 280                  // Coordenada X (centro del circulo)
-    mov x1, 190                // Coordenada Y
+    add x2, x19, 40                  // Coordenada X (centro del circulo)
+    add x1, x18, 90               // Coordenada Y
 	movz x10, 0xFF, lsl 16
     movk x10, 0x678B, lsl 00
     bl circle
-
+	
 	//DIENTES BOB//
 
-	movz x1, 328 // Coordenada X
-	movz x2, 212 // Coordenada Y
+	add x1, x19, 88 // Coordenada X
+	add x2, x18, 112 // Coordenada Y
+	movz x3, 10 // Ancho
+	movz x4, 15 // Alto
+	movz x10, 0xFF, lsl 16
+	movk x10, 0xFFFF, lsl 00 
+	bl rectangle
+	
+	add x1,x19,74 // Coordenada X
+	add x2, x18, 112 // Coordenada Y
 	movz x3, 10 // Ancho
 	movz x4, 15 // Alto
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00 
 	bl rectangle
 
-	movz x1, 314 // Coordenada X
-	movz x2, 212 // Coordenada Y
-	movz x3, 10 // Ancho
-	movz x4, 15 // Alto
-	movz x10, 0xFF, lsl 16
-	movk x10, 0xFFFF, lsl 00 
-	bl rectangle
-	
 	//SONRISA//
-	
+
 	mov x3, #52              // Radio del circulo
     mul x4, x3, x3
-    mov x2, 325                  // Coordenada X (centro del circulo)
-    mov x1, 163                // Coordenada Y
+    add x2, x19 ,85                  // Coordenada X (centro del circulo)
+    add x1, x18, 63                // Coordenada Y
 	movz x10, 0x00, lsl 16
     movk x10, 0x0000, lsl 00
     bl circle
-
 	mov x3, #55                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 325                  // Coordenada X (centro del circulo)
-    mov x1, 157                 // Coordenada Y
+    add x2, x19,85                  // Coordenada X (centro del circulo)
+    add x1, x18,57                 // Coordenada Y
 	movz x10, 0xFF, lsl 16
     movk x10, 0xFF33, lsl 00
     bl circle
@@ -337,16 +339,14 @@ endloop:
 
 	mov x3, #8                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 283                  // Coordenada X (centro del circulo)
-    mov x1, 195                // Coordenada Y
+    add x2, x19,43                  // Coordenada X (centro del circulo)
+    add x1, x18,95                // Coordenada Y
 	movz x10, 0xFF, lsl 16
     movk x10, 0xA07A, lsl 00
     bl circle
-
 	mov x3, #7                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 285                  // Coordenada X (centro del circulo)
-    mov x1, 196                // Coordenada Y
+    add x2, x19,45                  // Coordenada X (centro del circulo)
+    add x1, x18,96                // Coordenada Y
 	movz x10, 0xFF, lsl 16
     movk x10, 0xFF33, lsl 00
     bl circle
@@ -355,41 +355,30 @@ endloop:
 
 	mov x3, #1                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 283                  // Coordenada X (centro del circulo)
-    mov x1, 193                // Coordenada Y
+    add x2, x19, 43                  // Coordenada X (centro del circulo)
+    add x1, x18, 93                // Coordenada Y
 	movz x10, 0x8B, lsl 16
     movk x10, 0x4513, lsl 00
-    bl circle
-
-	mov x3, #1                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 283                  // Coordenada X (centro del circulo)
-    mov x1, 197                // Coordenada Y
-	movz x10, 0x8B, lsl 16
-    movk x10, 0x4513, lsl 00
-    bl circle
-
-	mov x3, #1                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 290                  // Coordenada X (centro del circulo)
-    mov x1, 196                // Coordenada Y
-	movz x10, 0x8B, lsl 16
-    movk x10, 0x4513, lsl 00
+    bl circle               
+    add x2, x19, 43                  // Coordenada X (centro del circulo)
+    add x1, x18, 97                // Coordenada Y
+    bl circle              
+    add x2, x19,50                  // Coordenada X (centro del circulo)
+    add x1, x18,96                // Coordenada Y
     bl circle
 
 	//CACHETE DERECHO//
+
 	mov x3, #8                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 364                  // Coordenada X (centro del circulo)
-    mov x1, 195                // Coordenada Y
+    add x2, x19,124                  // Coordenada X (centro del circulo)
+    add x1, x18, 95                // Coordenada Y
 	movz x10, 0xFF, lsl 16
     movk x10, 0xA07A, lsl 00
     bl circle
-
 	mov x3, #7                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 362                  // Coordenada X (centro del circulo)
-    mov x1, 196                // Coordenada Y
+    add x2, x19,122                  // Coordenada X (centro del circulo)
+    add x1, x18,96                // Coordenada Y
 	movz x10, 0xFF, lsl 16
     movk x10, 0xFF33, lsl 00
     bl circle
@@ -397,33 +386,22 @@ endloop:
 	//PECAS DERECHAS//
 	
 	mov x3, #1                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 363                  // Coordenada X (centro del circulo)
-    mov x1, 193                // Coordenada Y
+    add x2, x19,123                 // Coordenada X (centro del circulo)
+    add x1, x18, 93                // Coordenada Y
 	movz x10, 0x8B, lsl 16
     movk x10, 0x4513, lsl 00
     bl circle
-
-	mov x3, #1                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 360                  // Coordenada X (centro del circulo)
-    mov x1, 197               // Coordenada Y
-	movz x10, 0x8B, lsl 16
-    movk x10, 0x4513, lsl 00
+    add x2, x19,120                  // Coordenada X (centro del circulo)
+    add x1, x18,97               // Coordenada Y
     bl circle
-
-	mov x3, #1                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 366                  // Coordenada X (centro del circulo)
-    mov x1, 196                // Coordenada Y
-	movz x10, 0x8B, lsl 16
-    movk x10, 0x4513, lsl 00
+    add x2, x19,126                  // Coordenada X (centro del circulo)
+    add x1, x18,96                // Coordenada Y
     bl circle
 
 	//PANTALON BOB//
 
-	movz x1, 240 // Coordenada X
-	movz x2, 270 // Coordenada Y
+	mov x1, x19 // Coordenada X
+	add x2, x18,170 // Coordenada Y
 	movz x3, 170 // Ancho
 	movz x4, 87 // Alto
 	movz x10, 0xCD, lsl 16
@@ -432,30 +410,30 @@ endloop:
 
 	//CINTURON//
 
-	movz x1, 250 // Coordenada X
-	movz x2, 300 // Coordenada Y
+	add x1, x19, 10 // Coordenada X
+	add x2, x18, 200 // Coordenada Y
 	movz x3, 30 // Ancho
 	movz x4, 10 // Alto
 	movz x10, 0x8B, lsl 16
 	movk x10, 0x4513, lsl 00 
 	bl rectangle
-	movz x2, 300 // Coordenada Y
+	add x2, x18, 200 // Coordenada Y
 	add x1,x1,40
 	movz x4, 10 // Alto
 	bl rectangle
-	movz x2, 300 // Coordenada Y
-	add x1,x1,40
+	add x2, x18, 200 // Coordenada Y
+	add x1, x1, 40
 	movz x4, 10 // Alto
 	bl rectangle
-	movz x2, 300 // Coordenada Y
-	add x1,x1,40
+	add x2, x18, 200 // Coordenada Y
+	add x1, x1, 40
 	movz x4, 10 // Alto
 	bl rectangle 
 
 	//CAMISA BOB//
 
-	movz x1, 240 // Coordenada X
-	movz x2, 260 // Coordenada Y
+	mov x1, x19 // Coordenada X
+	add x2, x18,160 // Coordenada Y
 	movz x3, 170 // Ancho
 	movz x4, 30 // Alto
 	movz x10, 0xFF, lsl 16
@@ -464,8 +442,8 @@ endloop:
 
 	//CORBATA BOB//
 
-	movz x1, 320 // Coordenada X
-	movz x2, 260 // Coordenada Y
+	add x1, x19,80 // Coordenada X
+	add x2, x18,160 // Coordenada Y
 	movz x3, 10 // Ancho
 	movz x4, 50 // Alto
 	movz x10, 0xFF, lsl 16
@@ -474,75 +452,58 @@ endloop:
 
 	//PESTAÑAS IZQUIERDAS//
 
-	movz x1, 279 // Coordenada X
-	movz x2, 129 // Coordenada Y
+	add x1, x19,39 // Coordenada X
+	add x2, x18,29 // Coordenada Y
 	movz x3, 3 // Ancho
 	movz x4, 11 // Alto
 	movz x10, 0x00, lsl 16
 	movk x10, 0x0000, lsl 00 
 	bl rectangle
-	
-	movz x1, 287 // Coordenada X
-	movz x2, 125 // Coordenada Y
+	add x1, x19,47 // Coordenada X
+	add x2, x18,25 // Coordenada Y
 	movz x3, 3 // Ancho
 	movz x4, 20 // Alto
-	movz x10, 0x00, lsl 16
-	movk x10, 0x0000, lsl 00 
 	bl rectangle
-
-	movz x1, 297 // Coordenada X
-	movz x2, 129 // Coordenada Y
+	add x1, x19,57 // Coordenada X
+	add x2, x18,29 // Coordenada Y
 	movz x3, 3 // Ancho
 	movz x4, 11 // Alto
-	movz x10, 0x00, lsl 16
-	movk x10, 0x0000, lsl 00 
 	bl rectangle
   
  	//PESTAÑAS DERECHAS//
 
-  	movz x1, 349 // Coordenada X
-	movz x2, 129 // Coordenada Y
+  	add x1, x19,109 // Coordenada X
+	add x2, x18,29 // Coordenada Y
 	movz x3, 3 // Ancho
 	movz x4, 11 // Alto
-	movz x10, 0x00, lsl 16
-	movk x10, 0x0000, lsl 00 
 	bl rectangle
-	
-	movz x1, 357 // Coordenada X
-	movz x2, 125 // Coordenada Y
+	add x1, x19,117 // Coordenada X
+	add x2, x18,25 // Coordenada Y
 	movz x3, 3 // Ancho
 	movz x4, 20 // Alto
-	movz x10, 0x00, lsl 16
-	movk x10, 0x0000, lsl 00 
 	bl rectangle
-
-	movz x1, 367 // Coordenada X
-	movz x2, 129 // Coordenada Y
+	add x1, x19,127 // Coordenada X
+	add x2, x18,29 // Coordenada Y
 	movz x3, 3 // Ancho
 	movz x4, 11 // Alto
-	movz x10, 0x00, lsl 16
-	movk x10, 0x0000, lsl 00 
 	bl rectangle
 	
-	// Ojos bob
-	movz x10, 0x00, lsl 16
-    movk x10, 0x0000, lsl 00
+	//OJOS BOB//
 	
 	mov x3, #26                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 290                  // Coordenada X (centro del circulo)
-    mov x1, 160                 // Coordenada Y
+    add x2, x19,50                  // Coordenada X (centro del circulo)
+    add x1, x18,60                 // Coordenada Y
+	movz x10, 0x00, lsl 16
+    movk x10, 0x0000, lsl 00
     bl circle
 	add x2, x2, 70
 	bl circle 
-
+	sub x3, x3, 1                // Radio del circulo
+    add x2, x19,50                   // Coordenada X (centro del circulo)
+    add x1, x18,60                 // Coordenada Y
 	movz x10, 0xF5, lsl 16
     movk x10, 0xFFFA, lsl 00
-	
-	mov x3, #25                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 290                  // Coordenada X (centro del circulo)
-    mov x1, 160                 // Coordenada Y
     bl circle
 	add x2, x2, 70
 	bl circle 
@@ -551,18 +512,16 @@ endloop:
 
 	mov x3, #10                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 290                  // Coordenada X (centro del circulo)
-    mov x1, 160                 // Coordenada Y
+    add x2, x19,50                 // Coordenada X (centro del circulo)
+    add x1, x18,60                // Coordenada Y
 	movz x10, 0x40, lsl 16
     movk x10, 0xE0D0, lsl 00
     bl circle
 	add x2, x2, 70
 	bl circle 
-
-	mov x3, #5                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 290                  // Coordenada X (centro del circulo)
-    mov x1, 160                 // Coordenada Y
+	sub x3, x3,5                // Radio del circulo
+    add x2, x19,50                  // Coordenada X (centro del circulo)
+    add x1, x18,60                  // Coordenada Y
 	movz x10, 0x00, lsl 16
     movk x10, 0x0000, lsl 00
     bl circle
@@ -573,165 +532,117 @@ endloop:
 
 	mov x3, #3                // Radio del circulo
     mul x4, x3, x3
-    mov x2, 250                  // Coordenada X (centro del circulo)
-    mov x1, 160                 // Coordenada Y
+    add x2, x19,10                  // Coordenada X (centro del circulo) 
+    add x1, x18,60                // Coordenada Y 
 	movz x10, 0xB8, lsl 16
     movk x10, 0x860B, lsl 00
     bl circle
-
-	mov x3, #10                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 253                  // Coordenada X (centro del circulo)
-    mov x1, 140                 // Coordenada Y
-	movz x10, 0xB8, lsl 16
-    movk x10, 0x860B, lsl 00
-    bl circle
-
-	mov x3, #7               // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 390                  // Coordenada X (centro del circulo)
-    mov x1, 120                 // Coordenada Y
-	movz x10, 0xB8, lsl 16
-    movk x10, 0x860B, lsl 00
-    bl circle
-
-	mov x3, #12                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 370                  // Coordenada X (centro del circulo)
-    mov x1, 230                 // Coordenada Y
-	movz x10, 0xB8, lsl 16
-    movk x10, 0x860B, lsl 00
-    bl circle
-
-	mov x3, #4                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 350                  // Coordenada X (centro del circulo)
-    mov x1, 250                 // Coordenada Y
-	movz x10, 0xB8, lsl 16
-    movk x10, 0x860B, lsl 00
-    bl circle
-
-	mov x3, #11                // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 280                  // Coordenada X (centro del circulo)
-    mov x1, 240                 // Coordenada Y
-	movz x10, 0xB8, lsl 16
-    movk x10, 0x860B, lsl 00
-    bl circle
-
-	mov x3, #6               // Radio del circulo
-    mul x4, x3, x3
-    mov x2, 267                  // Coordenada X (centro del circulo)
-    mov x1, 220                 // Coordenada Y
-	movz x10, 0xB8, lsl 16
-    movk x10, 0x860B, lsl 00
-    bl circle 
-
+	mov x3, #10 
+	add x2,x2,3 //253X
+	sub x1,x1,20 //140Y
+	bl circle
+	mov x3, #7  
+	add x2,x2,137 //390x
+	sub x1,x1,20 //120y
+	bl circle
+	mov x3, #12  
+	sub x2,x2,20 //370x
+	add x1,x1,110 //230y
+	bl circle 
+	mov x3, #4
+	sub x2,x2,20 //350x
+	add x1,x1,20 //250y
+	bl circle
+	mov x3, #11
+	sub x2,x2,70 //280x
+	sub x1,x1,10 //240y
+	bl circle
+	mov x3, #6
+	sub x2,x2,13 //370x
+	sub x1,x1,20 //220y  
+	bl circle
+	
 	//MEDIAS//
 
-    movz x1, 285 // Coordenada X
-    movz x2, 360 // Coordenada Y
+    add x1, x19, 45 // Coordenada X
+    add x2, x18, 260 // Coordenada Y
     movz x3, 10 // Ancho
     movz x4, 80 // Alto
     movz x10, 0xFF, lsl 16
     movk x10, 0xFFFF, lsl 00 
     bl rectangle 
-	
-	movz x1, 355 // Coordenada X
-    movz x2, 360 // Coordenada Y
+	add x1, x19, 115 // Coordenada X
+    add x2, x18, 260 // Coordenada Y
     movz x3, 10 // Ancho
-    movz x4, 80 // Alto
-    movz x10, 0xFF, lsl 16
-    movk x10, 0xFFFF, lsl 00 
+    movz x4, 80 // Alto 
     bl rectangle 
 
     //PIERNAS//
 
-    movz x1, 285 // Coordenada X
-    movz x2, 357 // Coordenada Y
+    add x1, x19, 45 // Coordenada X
+    add x2, x18, 257 // Coordenada Y
     movz x3, 10 // Ancho
     movz x4, 40 // Alto
     movz x10, 0xFF, lsl 16
     movk x10, 0xFF00, lsl 00 
     bl rectangle 
-	
-	movz x1, 355 // Coordenada X
-    movz x2, 357 // Coordenada Y
+	add x1, x19, 115 // Coordenada X
+    add x2, x18, 257 // Coordenada Y
     movz x3, 10 // Ancho
     movz x4, 40 // Alto
-    movz x10, 0xFF, lsl 16
-    movk x10, 0xFF00, lsl 00 
     bl rectangle 
-
 
 	//ZAPATOS//
 
-    movz x1, 266 // Coordenada X
-    movz x2, 437 // Coordenada Y
+    add x1, x19, 26 // Coordenada X //266
+    add x2, x18, 337 // Coordenada Y
     movz x3, 30 // Ancho
     movz x4, 10 // Alto
     movz x10, 0x00, lsl 16
     movk x10, 0x0000, lsl 00 
     bl rectangle 
-
-	movz x1, 355 // Coordenada X
-    movz x2, 437 // Coordenada Y
+	add x1, x19, 115 // Coordenada X //
+    add x2, x18, 337 // Coordenada Y
     movz x3, 30 // Ancho
-    movz x4, 10 // Alto
-    movz x10, 0x00, lsl 16
-    movk x10, 0x0000, lsl 00 
+    movz x4, 10 // Alto 
     bl rectangle 
 
     //BRAZOS//
 	
-    movz x1, 210 // Coordenada X
-    movz x2, 260 // Coordenada Y
+    sub x1, x19, 30 // Coordenada X
+    add x2, x18, 160 // Coordenada Y
     movz x3, 30 // Ancho
     movz x4, 10 // Alto
 	movz x10, 0xFF, lsl 16
 	movk x10, 0xFFFF, lsl 00
     bl rectangle
-	
-    movz x1, 160 // Coordenada X
-    movz x2, 260 // Coordenada Y
+	add x1, x19, 160 // Coordenada X
+    add x2, x18, 160 // Coordenada Y
+    movz x3, 30 // Ancho
+    movz x4, 10 // Alto
+    bl rectangle
+	sub x1, x19, 80 // Coordenada X
+    add x2, x18, 160 // Coordenada Y
     movz x3, 50 // Ancho
     movz x4, 10 // Alto
     movz x10, 0xFF, lsl 16
     movk x10, 0xFF00, lsl 00 
     bl rectangle
-
-    movz x1, 160 // Coordenada X
-    movz x2, 180 // Coordenada Y
+    sub x1, x19, 80 // Coordenada X
+    add x2, x18, 80 // Coordenada Y
     movz x3, 10 // Ancho
     movz x4, 80 // Alto
-    movz x10, 0xFF, lsl 16
-    movk x10, 0xFF00, lsl 00 
     bl rectangle
-
-	movz x1, 450 // Coordenada X
-    movz x2, 260 // Coordenada Y
+	add x1, x19, 210 // Coordenada X
+    add x2, x18, 160 // Coordenada Y
     movz x3, 10 // Ancho
     movz x4, 80 // Alto
-    movz x10, 0xFF, lsl 16
-    movk x10, 0xFF00, lsl 00 
     bl rectangle
-	
-	movz x1, 400 // Coordenada X
-    movz x2, 260 // Coordenada Y
-    movz x3, 30 // Ancho
-    movz x4, 10 // Alto
-	movz x10, 0xFF, lsl 16
-	movk x10, 0xFFFF, lsl 00
-    bl rectangle
-
-	movz x1, 430 // Coordenada X
-    movz x2, 260 // Coordenada Y
+	add x1, x19, 190 // Coordenada X
+    add x2, x18, 160 // Coordenada Y
     movz x3, 20 // Ancho
     movz x4, 10 // Alto
-	movz x10, 0xFF, lsl 16
-	movk x10, 0xFF00, lsl 00
     bl rectangle
-
 
     // Infinite Loop
 InfLoop:
