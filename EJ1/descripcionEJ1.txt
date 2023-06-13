@@ -1,0 +1,8 @@
+Integrantes:
+ - Esteban Ezequiel Marin Reyna | Legajo: 45350724
+ - Alexis Joaquin Ortiz | Legajo : 45409224
+ - Manu Joan Saharrea | Legajo : 44766693
+
+ Explicacion:
+
+ Bob Esponja que esta en el fondo del mar, al utilizar la tecla espacio puede pestañear.

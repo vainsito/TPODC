@@ -1,6 +1,10 @@
+/*
+	Em este archivo se encuentran las funciones que se encargan de dibujar las figuras en pantalla.
+ */
+
 .ifndef shapes_s
-.equ shapes_s, 0
-.equ UPDATE, 65000
+.equ shapes_s, 0 // 0 = false, 1 = true
+.equ UPDATE, 65000 // 65000 = 1 segundo aproximadamente
 
 .include "data.s"
 
@@ -29,16 +33,11 @@ rectangle_draw_col:
 
 	ret
 
-draw_arena:
-	movz x1, 0
-	movz x2, 380
-	movz x3, SCREEN_WIDTH
-	movz x4, 100
-	movz x10, 0xF0, lsl 16
-	movk x10, 0xE68C, lsl 00 
-
-	bl rectangle
-
+/* 
+	Funcion Circle: Dibuja un circulo de radio asignado en las posiciones (x,y).
+  	Registros predefinidos: x1: X, x2: Y, x3: R, x10: Color
+  	Registros seteados: x4: i, x5: j, x6: Pixel, x7: (i-y)^2, x9: R^2, x11: y+R, x12: x+R, x13: (j-x)^2
+ */
 circle:
 		
 	//Top left coords
@@ -87,6 +86,13 @@ cir_next_pixel:
 	add x0, x0, #4		//fb next pixel
 	b circle_draw_row
 
+
+
+/*
+	Funcion delay : esta funcion se encarga de hacer un delay para que se pueda ver el dibujo en pantalla.
+	Registros predefinidos: x23: UPDATE
+	Registros seteados: x23
+ */ 
 delay:
     mov x23, UPDATE
 delay_loop:

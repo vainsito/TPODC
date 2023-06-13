@@ -276,7 +276,7 @@ endloop:
 	
 //--------------------------------------------BOB ESPONJA------------------------------------------------//
 
-	//CUERPO//
+	// --------------- CUERPO ---------------//
 
 	add x1, x19, xzr // Coordenada X
 	add x2, x18, xzr // Coordenada Y
@@ -286,7 +286,7 @@ endloop:
 	movk x10, 0xFF33, lsl 00 
 	bl rectangle
 	
-	//CACHETES BOB//
+	// ---------- CACHETES BOB --------------//
 	
 	mov x3, #5                // Radio del circulo
     mul x4, x3, x3
@@ -296,7 +296,7 @@ endloop:
     movk x10, 0x678B, lsl 00
     bl circle
 	
-	//DIENTES BOB//
+	//------- DIENTES BOB ------------------//
 
 	add x1, x19, 88 // Coordenada X
 	add x2, x18, 112 // Coordenada Y
@@ -314,7 +314,7 @@ endloop:
 	movk x10, 0xFFFF, lsl 00 
 	bl rectangle
 
-	//SONRISA//
+	// ----------------- SONRISA -----------//
 
 	mov x3, #52              // Radio del circulo
     mul x4, x3, x3
@@ -330,7 +330,7 @@ endloop:
     movk x10, 0xFF33, lsl 00
     bl circle
 
-	//CACHETE IZQUIERDO//
+	//---------- CACHETE IZQUIERDO -------//
 
 	mov x3, #8                // Radio del circulo
     mul x4, x3, x3
@@ -346,7 +346,7 @@ endloop:
     movk x10, 0xFF33, lsl 00
     bl circle
 
-	//PECAS IZQUIERDA//
+	//----------- PECAS IZQUIERDA ---------//
 
 	mov x3, #1                // Radio del circulo
     mul x4, x3, x3
@@ -362,7 +362,7 @@ endloop:
     add x1, x18,96                // Coordenada Y
     bl circle
 
-	//CACHETE DERECHO//
+	// ------ CACHETE DERECHO -----------//
 
 	mov x3, #8                // Radio del circulo
     mul x4, x3, x3
@@ -378,7 +378,7 @@ endloop:
     movk x10, 0xFF33, lsl 00
     bl circle
 
-	//PECAS DERECHAS//
+	//------- PECAS DERECHAS -----------//
 	
 	mov x3, #1                // Radio del circulo
     add x2, x19,123                 // Coordenada X (centro del circulo)
@@ -393,7 +393,7 @@ endloop:
     add x1, x18,96                // Coordenada Y
     bl circle
 
-	//PANTALON BOB//
+	// ---------- PANTALON BOB --------//
 
 	mov x1, x19 // Coordenada X
 	add x2, x18,170 // Coordenada Y
@@ -403,7 +403,7 @@ endloop:
 	movk x10, 0x853F, lsl 00 
 	bl rectangle
 
-	//CINTURON//
+	// --------- CINTURON -------- //
 
 	add x1, x19, 10 // Coordenada X
 	add x2, x18, 200 // Coordenada Y
@@ -425,7 +425,7 @@ endloop:
 	movz x4, 10 // Alto
 	bl rectangle 
 
-	//CAMISA BOB//
+	// ----------- CAMISA BOB ------- //
 
 	mov x1, x19 // Coordenada X
 	add x2, x18,160 // Coordenada Y
@@ -435,7 +435,7 @@ endloop:
 	movk x10, 0xFFFF, lsl 00 
 	bl rectangle
 
-	//CORBATA BOB//
+	//---------- CORBATA BOB -----------//
 
 	add x1, x19,80 // Coordenada X
 	add x2, x18,160 // Coordenada Y
@@ -445,7 +445,7 @@ endloop:
 	movk x10, 0x6666, lsl 00 
 	bl rectangle
 
-	//PESTAÑAS IZQUIERDAS//
+	//-------- PESTAÑAS IZQUIERDAS ------------//
 
 	cbnz x27, skip1
 	add x1, x19,39 // Coordenada X
@@ -466,7 +466,7 @@ endloop:
 	movz x4, 11 // Alto
 	bl rectangle
   
- 	//PESTAÑAS DERECHAS//
+ 	//----------- PESTAÑAS DERECHAS ------------ //
 
   	add x1, x19,109 // Coordenada X
 	add x2, x18,29 // Coordenada Y
@@ -484,7 +484,7 @@ endloop:
 	movz x4, 11 // Alto
 	bl rectangle
 	
-	//OJOS BOB//
+	// ------------- OJOS BOB ------------- //
 
 skip1:
 
@@ -506,7 +506,7 @@ skip1:
 	add x2, x2, 70
 	bl circle 
 
-	//PUPILAS//
+	// --------- PUPILAS ------------//
 
 	mov x3, #10                // Radio del circulo
     mul x4, x3, x3
@@ -526,7 +526,7 @@ skip1:
 	add x2, x2, 70
 	bl circle 
 
-	//PARPADOS//
+	// ------------- PARPADOS -------- //
 
 	cbz x27, skip2
 	mov x3, #26                // Radio del circulo
@@ -541,7 +541,7 @@ skip1:
 
 skip2:
 
-	//MANCHAS BOB//
+	//---------- MANCHAS BOB ----------//
 
 	mov x3, #3                // Radio del circulo
     mul x4, x3, x3
@@ -575,7 +575,7 @@ skip2:
 	sub x1,x1,20 //220y  
 	bl circle
 	
-	//MEDIAS//
+	//----------- MEDIAS -------------//
 
     add x1, x19, 45 // Coordenada X
     add x2, x18, 260 // Coordenada Y
@@ -590,7 +590,7 @@ skip2:
     movz x4, 80 // Alto 
     bl rectangle 
 
-    //PIERNAS//
+    //--------- PIERNAS ---------//
 
     add x1, x19, 45 // Coordenada X
     add x2, x18, 257 // Coordenada Y
@@ -605,7 +605,7 @@ skip2:
     movz x4, 40 // Alto
     bl rectangle 
 
-	//ZAPATOS//
+	//------------ ZAPATOS --------------//
 
     add x1, x19, 26 // Coordenada X //266
     add x2, x18, 337 // Coordenada Y
@@ -620,7 +620,7 @@ skip2:
     movz x4, 10 // Alto 
     bl rectangle 
 
-    //BRAZOS//
+    //---------- BRAZOS --------------//
 	
     sub x1, x19, 30 // Coordenada X
     add x2, x18, 160 // Coordenada Y
@@ -659,6 +659,12 @@ skip2:
 
 //--------------------------------------MOVIMIENTO Y GPIOM------------------------------------------//
 
+/* 
+	Utilizamos delay ya que de esta manera podemos evitar que nuestra animacion porpadee, debido a la cantidad de formas que se pintan por frame.
+	Al ser un dibujo grande y con muchas formas, si no utilizamos delay, el dibujo se veria como si parpadeara, ya que se pintaria y borraria muy rapido.
+	En este caso utilizamos delay de 3000, ya que es el que mejor se ve, pero se puede modificar a gusto.
+ */
+
 movz x4, 3000 //ACA DEFINO EL DELAY
 delayr:
     bl delay
@@ -667,6 +673,10 @@ delayr:
     b.ne delayr
 
     b end
+
+/* 
+	En end se encuentra el codigo que se utiliza para el movimiento del personaje, el cual se mueve con las teclas WASD y ESPACIO para que pestanee.
+ */
 
 end:
 		

@@ -1,3 +1,8 @@
+/*
+    En este archivo se definen las constantes que se usan en el programa
+    y se reservan las zonas de memoria necesarias para el programa.
+ */
+
 .ifndef data_s
 .equ data_s, 0
 
