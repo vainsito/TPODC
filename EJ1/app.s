@@ -8,17 +8,24 @@ main:
     mov x20, x0 // Guarda la dirección base del framebuffer en x20
 
 // ------------------------------ Dibujar el fondo --------------------------------------- //
-	mov x20, x0
-	mov x19, 240 	//COORDENADA X DE BOB
+
+
+	mov x19, 300 	//COORDENADA X DE BOB
 	mov x18, 100 	//COORDENADA Y DE BOB
 	
 	mov x21, #50 	//Coordenada x de burbujas 
 	mov x22, #150	//Coordenada y de burbujas 
 
+	mov x27, 1
+
+repeat:
+
 	movz x10, 0x00, lsl 16
 	movk x10, 0x00FF, lsl 00 // Color de fondo
 
+	mov x0,x20
 	mov x2, SCREEN_HEIGH         // Y Size 
+
 loop1:
 	mov x1, SCREEN_WIDTH         // X Size
 loop0:
@@ -37,7 +44,6 @@ loop0:
 cambio_color:
 	sub x10,x10, 1 //Vamos cambiando progresivamente el color  
     ret 
-
 endloop:  
 
 // ------------------------------ Casa de Patricio --------------------------------------- //
@@ -52,7 +58,7 @@ endloop:
 	bl circle 
 
 
-// ------------------------------ -------- Arena ---------------------------------------- //
+//--------------------------------------- Arena ----------------------------------------//
 
 	movz x1, 0              	// Coordenada X
 	movz x2, 380				// Coordenada Y
@@ -61,7 +67,7 @@ endloop:
 	movz x10, 0xFF, lsl 16		// Color
 	movk x10, 0xB266, lsl 00 	// Color 
 	bl rectangle
-	
+
 // ----------------------------------- Casa de calamardo  ----------------------------------------//
 
 	movz x10, 0x00, lsl 16
@@ -228,7 +234,7 @@ endloop:
 	bl circle
 	sub x3,x3,1
 	movz x10, 0x66, lsl 16
-	movk x10, 0xB2FF, lsl 00
+	movk x10, 0xB2FF, lsl 00	
 	bl circle
 
 	mov x3, #8                // Radio del circulo
@@ -278,7 +284,6 @@ endloop:
 	movz x10, 0x66, lsl 16
 	movk x10, 0xB2FF, lsl 00
 	bl circle
-	
 //--------------------------------------------BOB ESPONJA------------------------------------------------//
 
 	//CUERPO//
@@ -452,6 +457,7 @@ endloop:
 
 	//PESTAÑAS IZQUIERDAS//
 
+	cbnz x27, skip1
 	add x1, x19,39 // Coordenada X
 	add x2, x18,29 // Coordenada Y
 	movz x3, 3 // Ancho
@@ -489,7 +495,9 @@ endloop:
 	bl rectangle
 	
 	//OJOS BOB//
-	
+
+skip1:
+
 	mov x3, #26                // Radio del circulo
     mul x4, x3, x3
     add x2, x19,50                  // Coordenada X (centro del circulo)
@@ -527,6 +535,21 @@ endloop:
     bl circle
 	add x2, x2, 70
 	bl circle 
+
+	//PARPADOS//
+
+	cbz x27, skip2
+	mov x3, #26                // Radio del circulo
+    mul x4, x3, x3
+    add x2, x19,50                  // Coordenada X (centro del circulo)
+    add x1, x18,60                 // Coordenada Y
+	movz x10, 0xFF, lsl 16
+    movk x10, 0xD700, lsl 00
+    bl circle
+	add x2, x2, 70
+	bl circle 
+
+skip2:
 
 	//MANCHAS BOB//
 
@@ -643,6 +666,36 @@ endloop:
     movz x3, 20 // Ancho
     movz x4, 10 // Alto
     bl rectangle
+
+
+	movz x4, 10000 //ACA DEFINO EL DELAY
+delayr:
+    bl delay
+    sub x4, x4, 1
+    cmp x4, 0
+    b.ne delayr
+
+    b end
+
+//----------------------------------------------------------------------------------------------------------------//
+
+end:	
+
+mov x9, GPIO_BASE
+	str wzr, [x9, GPIO_GPFSEL0]
+	ldr w15, [x9, GPIO_GPLEV0]
+	and w11, w15, 0x20
+	cmp w11,0x20
+	b.eq tecla_esp
+	B end
+
+	tecla_esp:
+    cbz x27, on
+    mov x27, #0
+    b repeat
+    on:
+        mov x27, #1
+		b repeat 
 
     // Infinite Loop
 InfLoop:
